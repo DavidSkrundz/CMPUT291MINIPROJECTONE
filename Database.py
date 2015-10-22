@@ -1,15 +1,16 @@
 import cx_Oracle
 
-import LoginView
-
 class Database:
 	def __init__(self, connection, cursor):
 		self.connection = connection
 		self.cursor = cursor
 	
-	def get(self, querry):
-		self.cursor.execute(querry)
+	def get(self, query):
+		self.cursor.execute(query)
 		return self.cursor.fetchall()
+	
+	def put(self, query):
+		self.cursor.execute(query)
 	
 	def commit(self):
 		self.connection.commit()
@@ -21,24 +22,12 @@ class Database:
 	def newCursor(self):
 		return Database(self.connection, self.connection.cursor())
 
-def connect():
-	tries = 0
-	database = None
-	while tries < 3:
-		tries += 1
-		database = dbLogin(tries > 1)
-		if database:
-			break
-	return database
-
-def dbLogin(previous=False):
-	(username, password) = LoginView.getLogin("Connect to database", previous)
-	return _connect(username, password)
-
-def _connect(username, password):
+def connect(username, password):
 	# Build connection string
 	host = "localhost"
+#	host = "gwynne.cs.ualberta.ca"
 	port = "1525"
+#	port = "1521"
 	sid = "CRS"
 	dsn = cx_Oracle.makedsn(host, port, sid)
 	cursor = None
