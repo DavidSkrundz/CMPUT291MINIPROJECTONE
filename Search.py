@@ -70,7 +70,7 @@ def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destin
                 a1.flightno,
                 a2.flightno,
                 a2.dep_time,
-                a1.arr_time;)
+                a1.arr_time)
                 """
 
     GoodFlights =   """
@@ -128,8 +128,3 @@ def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destin
 
     if roundTrip:
         back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate)
-
-
-    print(there)
-    print("-----------------------------------------------------------------")
-    print(back)
