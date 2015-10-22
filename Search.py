@@ -122,7 +122,7 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 				Select * from GoodFlights
 				where src = '{}' and
 				dst = '{}' and
-				dep_date = '{}'
+				dep_date = to_date('{}', 'yyyy-mm-dd')
 				"""
 
 	there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate)
