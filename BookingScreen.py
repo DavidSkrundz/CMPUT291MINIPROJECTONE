@@ -5,7 +5,7 @@ import Util
 
 def bookingScreen(database, email):
 	while True:
-		clear()
+		Util.clear()
 		Booking.bookingQuery(database, email)
 		bookings = database.cursor.fetchall()
 		for idx, booking in enumerate(bookings):
@@ -21,7 +21,7 @@ def bookingScreen(database, email):
 			input("")
 			continue
 		else:
-			clear()
+			Util.clear()
 			print("Name = {}".format(bookings[selection][0]))
 			print("Price = {}".format(bookings[selection][1]))
 			print("Ticket no. = {}".format(bookings[selection][2]))
