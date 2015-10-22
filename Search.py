@@ -129,17 +129,12 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 	print(there)
 	if roundTrip:
 		back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate)
-<<<<<<< HEAD
-
-
-=======
 		print(back)
-	
+
 	print(there)
 
-		
-		
->>>>>>> 21656995c861fd1a006596b1ef1fa9d86aea4dae
+
+
 	theres = database.get(there)
 	for the in theres:
 		print(the)
