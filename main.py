@@ -7,6 +7,7 @@ import os
 import cx_Oracle
 
 import Database
+import MainScreen
 
 def connectScreen():
 	database = None
@@ -18,9 +19,9 @@ def connectScreen():
 		database = Database.connect(username, password)
 		if database:
 			break
-	mainScreen(database)
+	introScreen(database)
 
-def mainScreen(database):
+def introScreen(database):
 	while True:
 		clear()
 		print("Screen 1")
@@ -38,22 +39,32 @@ def mainScreen(database):
 			pass
 
 def loginScreen(database):
-	pass
+	clear()
+	print("Login")
+	email = input("Email: ")
+	password = getpass.getpass("Password: ")
+	users = database.get("select u.email, u.pass from users u where u.email = '{}' and u.pass = '{}'".format(email, password))
+	if len(users) == 1:
+		isAgent = False
+		agents = database.get("select * from airline_agents a where a.email = '{}'".format(email))
+		if len(agents) == 1:
+			isAgent = True
+		MainScreen.mainScreen(database, email, isAgent)
+	input("Invalid login")
 
 def registerScreen(database):
 	clear()
 	print("Register as new user")
 	email = input("Email: ")
 	# Make sure the email isn't already taken
-	emails = database.get("select u.email from users u where u.email = '" + email + "'")
-	for email in emails:
-		print(email)
+	emails = database.get("select u.email from users u where u.email = '{}'".format(email))
 	if len(emails) > 0:
 		input("Email already exists (enter to continue)")
 		return
 	password = getpass.getpass("Password: ")
-	database.put("insert into users values ('" + email + "', '" + password + "', null)")
+	database.put("insert into users values ('{}', '{}', null)".format(email, password))
 	database.commit()
+	input("User created (enter to continue)")
 
 def main():
 	connectScreen()
