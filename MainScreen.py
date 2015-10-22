@@ -21,7 +21,7 @@ def mainScreen(database, email, isAgent):
 		if selection == "1":
 			searchFlights(database)
 		elif selection == "2":
-			BookingScreen.bookingScreen(database)
+			BookingScreen.bookingScreen(database, email)
 		elif selection == "3":
 			if isAgent:
 				recordDeparture(database)
