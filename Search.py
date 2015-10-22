@@ -2,22 +2,16 @@ import sys
 
 def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destination):
 
-    flightsQ = """SELECT sch_flights.flightno
-                    FROM sch_flights INNER JOIN flights
-                    ON sch_flights.flightno = flights.flightno
-                    WHERE dep_date = '()' AND
-                            src = '()' AND
-                            dst = '()'"""
-
-    AvailFlights = """select f.flightno,
-                            sf.dep_date,
-                            f.src,
-                            f.dst,
-                            f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time)) as Dep_Time,
-	                        f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time))+(f.est_dur/60+a2.tzone-a1.tzone)/24 as arr_Time,
-                            fa.fare,
-                            fa.limit-count(tno),
-                            fa.price
+    AvailFlights = """With available_flights as (
+                        select f.flightno,
+                        sf.dep_date,
+                        f.src,
+                        f.dst,
+                        f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time)) as Dep_Time,
+	                    f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time))+(f.est_dur/60+a2.tzone-a1.tzone)/24 as arr_Time,
+                        fa.fare,
+                        fa.limit-count(tno) as seats,
+                        fa.price
 
                         from flights f,
                         flight_fares fa,
@@ -45,14 +39,77 @@ def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destin
                         fa.fare,
                         fa.limit,
                         fa.price
-                        having fa.limit-count(tno) >= ())""".format(partySize)
+                        having fa.limit-count(tno) >= 1)"""
 
-    print(AvailFlights)
-    thereflights = flightsQ.replace("%DEPDATE", depDate)
-    thereflights = thereflights.replace("SOURCE", source)
-    thereflights = thereflights.replace("%DESINTATION", destination)
 
-    if roundTrip:
-        retflights = flightsQ.replace("%DEPDATE", retDate)
-        retflights = retflights.replace("%SOURCE", destination)
-        retflights = retflights.replace("%DESTINATION", source)
+    GoodConns = """
+                , Good_connections as (
+                select a1.src,
+                a2.dst,
+                a1.dep_date,
+                a1.dep_time,
+                a2.arr_time,
+                a1.flightno as flightno1,
+                a2.flightno as flightno2,
+                a2.dep_time-a1.arr_time as layovertime,
+	            min(a1.price+a2.price) as Price,
+                CASE WHEN a1.seats <= a2.seats then a1.seats else a2.seats end as seats
+
+                from available_flights a1,
+                available_flights a2
+
+                where a1.dst=a2.src and
+                a1.arr_time +1.5/24 <=a2.dep_time and
+                a1.arr_time +5/24 >=a2.dep_time
+
+                group by a1.src,
+                a2.dst,
+                a1.dep_date,
+                a1.dep_time,
+                a2.arr_time,
+                a1.flightno,
+                a2.flightno,
+                a2.dep_time,
+                a1.arr_time;)
+                """
+
+    GoodFlights =   """
+                    , GoodFlights as (
+                    Select flightno,
+                    null as flightno2
+                    src,
+                    dst,
+                    dep_time,
+                    arr_time,
+                    0 as Stops,
+                    null as LayoverTime,
+                    price,
+                    sum(seats) as seatCount
+
+                    From available_flights
+
+                    GROUP BY flightno,
+                    src,
+                    dst,
+                    dep_time,
+                    arr_time,
+                    price,
+                    seats
+
+                    UNION
+
+                    Select flightno1,
+                    flightno2,
+                    src,
+                    dst,
+                    dep_time,
+                    arr_time,
+                    layovertime,
+                    price,
+                    seats
+
+                    from good_connections
+                    )
+                    """
+
+    
