@@ -10,9 +10,14 @@ def bookingScreen(database, email):
 		for idx, booking in enumerate(bookings):
 			print("{0}. Ticket no. = {1} Name = {2} Date = {3} Price = {4}"\
 				.format(idx, booking[2], booking[0], booking[3].strftime("%d-%b-%Y"), booking[1]))
+		if len(bookings) == 0:
+			print("No boookings.")
+			input("")
+			return
 		selection = input("Select booking:")
-		if int(selection) > len(bookings):
+		if selection > len(bookings):
 			print("Invalid selection.")
+			input("")
 			continue
 		else:
 			os.system("clear")
