@@ -50,7 +50,8 @@ def loginScreen(database):
 		if len(agents) == 1:
 			isAgent = True
 		MainScreen.mainScreen(database, email, isAgent)
-	input("Invalid login")
+	else:
+		input("Invalid login")
 
 def registerScreen(database):
 	clear()
