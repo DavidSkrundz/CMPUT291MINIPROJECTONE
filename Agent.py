@@ -1,6 +1,3 @@
-import sys
-import Database
-
 def recordDeparture(database, flightno, dep_date, time):
 	query = """UPDATE sch_flights
 			SET act_dep_time = TO_DATE({0})
