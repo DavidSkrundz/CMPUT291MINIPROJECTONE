@@ -9,6 +9,9 @@ class Database:
 		self.cursor.execute(querry)
 		return self.cursor.fetchall()
 	
+	def put(self, querry):
+		self.cursor.execute(querry)
+	
 	def commit(self):
 		self.connection.commit()
 	

@@ -11,6 +11,7 @@ import Database
 def connectScreen():
 	database = None
 	while True:
+		clear()
 		print("Connect to database")
 		username = input("Username: ")
 		password = getpass.getpass("Password: ")
@@ -21,11 +22,12 @@ def connectScreen():
 
 def mainScreen(database):
 	while True:
+		clear()
 		print("Screen 1")
 		print("1. Login")
 		print("2. Register")
 		print("3. Exit")
-		selection = input("")
+		selection = input(" ")
 		if selection == "1":
 			loginScreen(database)
 		elif selection == "2":
@@ -39,7 +41,19 @@ def loginScreen(database):
 	pass
 
 def registerScreen(database):
-	pass
+	clear()
+	print("Register as new user")
+	email = input("Email: ")
+	# Make sure the email isn't already taken
+	emails = database.get("select u.email from users u where u.email = '" + email + "'")
+	for email in emails:
+		print(email)
+	if len(emails) > 0:
+		input("Email already exists (enter to continue)")
+		return
+	password = getpass.getpass("Password: ")
+	database.put("insert into users values ('" + email + "', '" + password + "', null)")
+	database.commit()
 
 def main():
 	connectScreen()
