@@ -1,6 +1,9 @@
 import os
 
 import Agent
+import BookingScreen
+import Search
+import Util
 
 def mainScreen(database, email, isAgent):
 	while True:
@@ -16,9 +19,9 @@ def mainScreen(database, email, isAgent):
 			print("3. Logout")
 		selection = input(" ")
 		if selection == "1":
-			pass
+			searchFlights(database)
 		elif selection == "2":
-			pass
+			BookingScreen.bookingScreen(database)
 		elif selection == "3":
 			if isAgent:
 				recordDeparture(database)
@@ -31,21 +34,38 @@ def mainScreen(database, email, isAgent):
 		else:
 			pass
 
+def searchFlights(database):
+	clear()
+	print("Search Flights")
+	roundTrip = input("Round Trip? (y/n): ").lower() == "y"
+	source = Util.findAirportCode(database, input("Source: "))
+	destination = Util.findAirportCode(database, input("Destination: "))
+	date = input("Departure Date (YYYY-MM-DD): ")
+	partySize = 1
+	returnDate = None
+	if roundTrip:
+		partySize = input("Party Size: ")
+		returnDate = input("Return Date (YYYY-MM-DD): ")
+	flights = Search.flightQuery(database, roundTrip, returnDate, date, partySize, source, destination)
+	# TODO:
+
 def recordDeparture(database):
 	clear()
 	print("Record Departure Time")
 	flightno = input("Flight Number: ")
 	date = input("Departure Date (YYYY-MM-DD): ")
-	time = input("Time (hh-mm-ss): ")
+	time = input("Actual Departure Time (hh-mm-ss): ")
 	Agent.recordDeparture(database, flightno, date, time)
+	input("Updated (enter to continue)")
 
 def recordArrival(database):
 	clear()
 	print("Record Arrival Time")
 	flightno = input("Flight Number: ")
 	date = input("Departure Date (YYYY-MM-DD): ")
-	time = input("Time (hh-mm-ss): ")
+	time = input("Actual Arrival Time (hh-mm-ss): ")
 	Agent.recordArrival(database, flightno, date, time)
+	input("Updated (enter to continue)")
 
 def clear():
 	os.system("clear")
