@@ -79,6 +79,7 @@ def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destin
                     null as flightno2
                     src,
                     dst,
+                    dep_date,
                     dep_time,
                     arr_time,
                     0 as Stops,
@@ -91,6 +92,7 @@ def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destin
                     GROUP BY flightno,
                     src,
                     dst,
+                    dep_date,
                     dep_time,
                     arr_time,
                     price,
@@ -102,8 +104,10 @@ def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destin
                     flightno2,
                     src,
                     dst,
+                    dep_date,
                     dep_time,
                     arr_time,
+                    1 as Stops,
                     layovertime,
                     price,
                     seats
@@ -112,4 +116,20 @@ def flightQuery(Database, roundTrip, retDate, depDate, partySize, source, destin
                     )
                     """
 
-    
+
+    FlightsQ = """
+                Select * from GoodFlights
+                where src = '{}' and
+                dst = '{}' and
+                dep_date = '{}'
+                """
+
+    there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate)
+
+    if roundTrip:
+        back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate)
+
+
+    print(there)
+    print("-----------------------------------------------------------------")
+    print(back)
