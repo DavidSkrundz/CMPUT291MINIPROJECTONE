@@ -70,13 +70,14 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 				a1.flightno,
 				a2.flightno,
 				a2.dep_time,
-				a1.arr_time)
+				a1.arr_time,
+				CASE WHEN a1.seats <= a2.seats then a1.seats else a2.seats end)
 				"""
 
 	GoodFlights =   """
 					, GoodFlights as (
 					Select flightno,
-					null as flightno2
+					null as flightno2,
 					src,
 					dst,
 					dep_date,
@@ -121,15 +122,19 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 				Select * from GoodFlights
 				where src = '{}' and
 				dst = '{}' and
-				dep_date = '{}'
+				dep_date = '{}';
 				"""
 
 	there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate)
-
+	print(there)
 	if roundTrip:
 		back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate)
-		
-		
+		print(back)
+
+	print(there)
+
+
+
 	theres = database.get(there)
 	for the in theres:
 		print(the)
