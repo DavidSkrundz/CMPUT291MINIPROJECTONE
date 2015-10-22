@@ -5,12 +5,12 @@ class Database:
 		self.connection = connection
 		self.cursor = cursor
 	
-	def get(self, querry):
-		self.cursor.execute(querry)
+	def get(self, query):
+		self.cursor.execute(query)
 		return self.cursor.fetchall()
 	
-	def put(self, querry):
-		self.cursor.execute(querry)
+	def put(self, query):
+		self.cursor.execute(query)
 	
 	def commit(self):
 		self.connection.commit()
