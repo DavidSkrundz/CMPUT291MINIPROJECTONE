@@ -1,5 +1,7 @@
 import os
 
+import Agent
+
 def mainScreen(database, email, isAgent):
 	while True:
 		clear()
@@ -19,15 +21,31 @@ def mainScreen(database, email, isAgent):
 			pass
 		elif selection == "3":
 			if isAgent:
-				pass
+				recordDeparture(database)
 			else:
 				return
 		elif selection == "4" and isAgent:
-			pass
+			recordArrival(database)
 		elif selection == "5" and isAgent:
 			return
 		else:
 			pass
+
+def recordDeparture(database):
+	clear()
+	print("Record Departure Time")
+	flightno = input("Flight Number: ")
+	date = input("Departure Date (YYYY-MM-DD): ")
+	time = input("Time (hh-mm-ss): ")
+	Agent.recordDeparture(database, flightno, date, time)
+
+def recordArrival(database):
+	clear()
+	print("Record Arrival Time")
+	flightno = input("Flight Number: ")
+	date = input("Departure Date (YYYY-MM-DD): ")
+	time = input("Time (hh-mm-ss): ")
+	Agent.recordArrival(database, flightno, date, time)
 
 def clear():
 	os.system("clear")
