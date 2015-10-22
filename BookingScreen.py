@@ -28,5 +28,3 @@ def bookingScreen(database, email):
 			selection = input("")
 			if selection == 1:
 				Booking.cancelBooking(database, bookings[selection][2])
-				
-			
