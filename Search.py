@@ -70,7 +70,7 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 				a1.flightno,
 				a2.flightno,
 				a2.dep_time,
-				a1.arr_time;)
+				a1.arr_time)
 				"""
 
 	GoodFlights =   """
