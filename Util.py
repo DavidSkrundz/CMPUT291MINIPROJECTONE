@@ -3,7 +3,7 @@ import os
 def findAirportCode(database, airportCodeOrName):
 	# Look for airport code
 	foundCodes = database.get("select a.acode from airports a where lower(a.acode) = '{}'".format(airportCodeOrName.lower()))
-	if foundCodes == 1:
+	if len(foundCodes) == 1:
 		return foundCodes[0][0]
 	else:
 		foundCodes = database.get("select a.acode, a.name, a.city from airports a where lower(a.city) like '%{0}%' or lower(a.name) like '%{0}%'".format(airportCodeOrName.lower()))
