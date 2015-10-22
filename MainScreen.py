@@ -7,7 +7,7 @@ import Util
 
 def mainScreen(database, email, isAgent):
 	while True:
-		clear()
+		Util.clear()
 		print("Main Screen")
 		print("1. Search")
 		print("2. List Bookings")
@@ -35,7 +35,7 @@ def mainScreen(database, email, isAgent):
 			pass
 
 def searchFlights(database):
-	clear()
+	Util.clear()
 	print("Search Flights")
 	roundTrip = input("Round Trip? (y/n): ").lower() == "y"
 	source = Util.findAirportCode(database, input("Source: "))
@@ -50,7 +50,7 @@ def searchFlights(database):
 	# TODO:
 
 def recordDeparture(database):
-	clear()
+	Util.clear()
 	print("Record Departure Time")
 	flightno = input("Flight Number: ")
 	date = input("Departure Date (YYYY-MM-DD): ")
@@ -59,13 +59,10 @@ def recordDeparture(database):
 	input("Updated (enter to continue)")
 
 def recordArrival(database):
-	clear()
+	Util.clear()
 	print("Record Arrival Time")
 	flightno = input("Flight Number: ")
 	date = input("Departure Date (YYYY-MM-DD): ")
 	time = input("Actual Arrival Time (hh-mm-ss): ")
 	Agent.recordArrival(database, flightno, date, time)
 	input("Updated (enter to continue)")
-
-def clear():
-	os.system("clear")

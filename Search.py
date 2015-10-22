@@ -122,25 +122,16 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 				Select * from GoodFlights
 				where src = '{}' and
 				dst = '{}' and
-				dep_date = '{}';
+				dep_date = '{}'
 				"""
 
 	there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate)
-	print(there)
 	if roundTrip:
 		back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate)
-		print(back)
 
 	print(there)
-
-
-
 	theres = database.get(there)
 	for the in theres:
 		print(the)
-
-	backs = database.get(back)
-	for ba in backs:
-		print(ba)
 
 	input("")

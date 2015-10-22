@@ -8,6 +8,7 @@ import cx_Oracle
 
 import Database
 import MainScreen
+import Util
 
 def connectScreen():
 	database = None
@@ -71,7 +72,7 @@ def main():
 	connectScreen()
 
 def clear():
-	os.system("clear")
+	Util.clear()
 
 if __name__ == "__main__":
 	try:

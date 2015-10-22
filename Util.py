@@ -1,3 +1,5 @@
+import os
+
 def findAirportCode(database, airportCodeOrName):
 	# Look for airport code
 	foundCodes = database.get("select a.acode from airports a where lower(a.acode) = '{}'".format(airportCodeOrName.lower()))
@@ -16,3 +18,9 @@ def findAirportCode(database, airportCodeOrName):
 		else:
 			print("BAD THING")
 			pass
+
+def clear():
+	if os.name == 'nt':
+		os.system('cls')
+	else:
+		os.system('clear')
