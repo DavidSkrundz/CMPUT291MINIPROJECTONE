@@ -7,8 +7,8 @@ class Database:
 		self.connection = connection
 		self.cursor = cursor
 	
-	def get(self, querry, values=[]):
-		self.cursor.execute(querry, values)
+	def get(self, querry):
+		self.cursor.execute(querry)
 		return self.cursor.fetchall()
 	
 	def commit(self):
