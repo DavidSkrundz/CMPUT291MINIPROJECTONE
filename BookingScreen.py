@@ -1,9 +1,10 @@
 import os
+import sys
 import Booking
 
 def bookingScreen(database, email):
 	while True:
-		clear()
+		os.system("clear")
 		bookingQuery(database, email)
 		bookings = database.cursor.fetchall()
 		for idx, booking in enumerate(bookings):
@@ -14,7 +15,7 @@ def bookingScreen(database, email):
 			print("Invalid selection.")
 			continue
 		else:
-			clear()
+			os.system("clear")
 			print("Name = {}".format(bookings[selection][0]))
 			print("Price = {}".format(bookings[selection][1]))
 			print("Ticket no. = {}".format(bookings[selection][2]))
