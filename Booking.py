@@ -15,13 +15,15 @@ def addBooking(database, flightno, fare, dep_date):
 	tno = database.get(query)[0][0]
 	
 	seat = str(random.randint(0, 99)) + random.choice("abcdef")
-	
+				
 	query = """INSERT INTO bookings
-			VALUES({0}, '{1}', '{2}', TO_DATE('{3}'), '{4}')""".format(
+			VALUES({0}, '{1}', '{2}', TO_DATE('{3}', 'YYYY-MM-DD'), '{4}')""".format(
 				tno, flightno, fare, dep_date, seat)
 
 	database.cursor.execute(query)
 	database.commit()
+	
+	return tno
 
 def cancelBooking(database, tno):
 	query = """DELETE FROM
