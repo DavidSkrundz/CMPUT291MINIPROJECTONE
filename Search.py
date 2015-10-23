@@ -1,6 +1,6 @@
 import sys
 
-def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destination):
+def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destination, bystops):
 
 	AvailFlights = """With available_flights as (
 						select f.flightno,
@@ -119,19 +119,30 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 
 
 	FlightsQ = """
+				--, queriedFlights as (
 				Select * from GoodFlights
-				where src = '{}' and
-				dst = '{}' and
-				dep_date = to_date('{}', 'yyyy-mm-dd')
+				where src = '{0}' and
+				dst = '{1}' and
+				dep_date = to_date('{2}', 'yyyy-mm-dd')
+				ORDER BY {3} price
 				"""
 
-	there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate)
+	if bystops:
+		there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate, 'stops,')
+	else:
+		there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate, '')
 	if roundTrip:
-		back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate)
+		if bystops:
+			back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate, 'stops,')
+		else:
+			back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate, '')
 
-	print(there)
+		backs = database.get(back)
+		for the in backs:
+			print(the[0] + ' ' + str(the[7]) + ' ' + str(the[9]) + ' ' + str(the[10]))
+	print('-----------------------------')
 	theres = database.get(there)
 	for the in theres:
-		print(the)
+		print(the[0] + ' ' + str(the[7]) + ' ' + str(the[9]) + ' ' + str(the[10]))
 
 	input("")
