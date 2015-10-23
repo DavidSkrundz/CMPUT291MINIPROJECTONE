@@ -3,6 +3,7 @@ import os
 import Agent
 import Booking
 import Search
+import Tickets
 import Util
 
 def mainScreen(database, email, isAgent):
@@ -19,7 +20,7 @@ def mainScreen(database, email, isAgent):
 			print("3. Logout")
 		selection = input(" ")
 		if selection == "1":
-			searchFlights(database)
+			searchFlights(database, email)
 		elif selection == "2":
 			BookingScreen.bookingScreen(database, email)
 		elif selection == "3":
@@ -40,7 +41,7 @@ def logout(database, email):
 	database.put("update users set last_login = sysdate where users.email = '{}'".format(email))
 	database.commit()
 
-def searchFlights(database):
+def searchFlights(database, email):
 	Util.clear()
 	print("Search Flights")
 	roundTrip = input("Round Trip? (y/n): ").lower() == "y"
@@ -54,12 +55,12 @@ def searchFlights(database):
 	sortByCon = input("Sorting by price. Sort by connections instead? (y/n): ").lower() == "y"
 	flights = Search.flightQuery(database, roundTrip, returnDate, date, partySize, source, destination, sortByCon)
 	if flights == None:
-		input("Flight got full because you're too slow")
+		input("Flight got full because you're too slow (enter to continue)")
 		return
 	print(flights)
-	Booking.addBooking(database, flights[0], flights[11], flights[4].strftime('%Y-%m-%d'))
+	Booking.addBooking(database, email, flights[0], flights[11], flights[4].strftime('%Y-%m-%d'), flights[9])
 	if not flights[1] == None:
-		Booking.addBooking(database, flights[1], flights[12], flights[4].strftime('%Y-%m-%d'))
+		Booking.addBooking(database, flights[1], flights[12], flights[4].strftime('%Y-%m-%d'), flights[9])
 # need name, email, price
 	input("Booked (enter to continue)")
 

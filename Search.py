@@ -160,7 +160,7 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 
 	stillAvailable = AvailFlights + GoodConns + GoodFlights + """Select * from GoodFlights where flightno = '{0}' AND
 																('{1}' = flightno2 or (flightno2 is null and '{1}' = 'None'))
-																AND '{2}' = fare and ('{3}' = fare2 or ( '{3}' <> 'None' and fare2 is null))""".format(theres[flight -1][0], theres[flight -1][1], theres[flight -1][11], theres[flight -1][12])
+																AND '{2}' = fare and ('{3}' = fare2 or ( '{3}' = 'None' and fare2 is null))""".format(theres[flight -1][0], theres[flight -1][1], theres[flight -1][11], theres[flight -1][12])
 
 	if len(database.get(stillAvailable)) > 0:
 		return theres[flight - 1]
