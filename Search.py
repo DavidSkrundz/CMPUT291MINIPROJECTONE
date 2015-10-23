@@ -53,7 +53,9 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 				a2.flightno as flightno2,
 				a2.dep_time-a1.arr_time as layovertime,
 				min(a1.price+a2.price) as Price,
-				CASE WHEN a1.seats <= a2.seats then a1.seats else a2.seats end as seats
+				CASE WHEN a1.seats <= a2.seats then a1.seats else a2.seats end as seats,
+				a1.fare as fare1,
+				a2.fare as fare2
 
 				from available_flights a1,
 				available_flights a2
@@ -71,7 +73,9 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 				a2.flightno,
 				a2.dep_time,
 				a1.arr_time,
-				CASE WHEN a1.seats <= a2.seats then a1.seats else a2.seats end)
+				CASE WHEN a1.seats <= a2.seats then a1.seats else a2.seats end,
+				a1.fare,
+				a2.fare)
 				"""
 
 	GoodFlights =   """
@@ -86,7 +90,9 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 					0 as Stops,
 					null as LayoverTime,
 					price,
-					sum(seats) as seatCount
+					sum(seats) as seatCount,
+					fare,
+					null as fare2
 
 					From available_flights
 
@@ -97,7 +103,8 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 					dep_time,
 					arr_time,
 					price,
-					seats
+					seats,
+					fare
 
 					UNION
 
@@ -111,7 +118,9 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 					1 as Stops,
 					layovertime,
 					price,
-					seats
+					seats,
+					fare1,
+					fare2
 
 					from good_connections
 					)
@@ -142,13 +151,21 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 		there = AvailFlights + GoodConns + GoodFlights + FlightsThere.format(source, destination, depDate) + "Select * from flightsthere order by price"
 
 	theres = database.get(there)
-	print("Index    Flight Number   Stops     Price     Seats Available")
+	print("Index    Flight Number  flightno2      Stops     Price     Seats Available")
 	for idx, the in enumerate(theres):
-		print(str(idx + 1) + '         ' +the[0] + '           ' + str(the[7]) + '       ' + str(the[9]) + '             ' + str(the[10]))
+		print(str(idx + 1) + '         ' +the[0] +'         ' + str(the[1]) + '           ' + str(the[7]) + '       ' + str(the[9]) + '             ' + str(the[10]))
 
 	flight = int(input("Choose your flight: "))
-	return theres[flight - 1]
 
+
+	stillAvailable = AvailFlights + GoodConns + GoodFlights + """Select * from GoodFlights where flightno = '{0}' AND
+																('{1}' = flightno2 or (flightno2 is null and '{1}' = 'None'))
+																AND '{2}' = fare and ('{3}' = fare2 or ( '{3}' <> 'None' and fare2 is null))""".format(theres[flight -1][0], theres[flight -1][1], theres[flight -1][11], theres[flight -1][12])
+
+	if len(database.get(stillAvailable)) > 0:
+		return theres[flight - 1]
+	else:
+		return None
 	#Not here yet, but we'll eventually get to the point of getting round trips ;)
 	print('-----------------------------')
 
