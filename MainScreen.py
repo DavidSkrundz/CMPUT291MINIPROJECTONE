@@ -26,13 +26,19 @@ def mainScreen(database, email, isAgent):
 			if isAgent:
 				recordDeparture(database)
 			else:
+				logout(database, email)
 				return
 		elif selection == "4" and isAgent:
 			recordArrival(database)
 		elif selection == "5" and isAgent:
+			logout(database, email)
 			return
 		else:
 			pass
+
+def logout(database, email):
+	database.put("update users set last_login = sysdate where users.email = '{}'".format(email))
+	database.commit()
 
 def searchFlights(database):
 	Util.clear()
@@ -54,7 +60,7 @@ def recordDeparture(database):
 	print("Record Departure Time")
 	flightno = input("Flight Number: ")
 	date = input("Departure Date (YYYY-MM-DD): ")
-	time = input("Actual Departure Time (hh-mm-ss): ")
+	time = input("Actual Departure Time (hh:mm:ss): ")
 	Agent.recordDeparture(database, flightno, date, time)
 	input("Updated (enter to continue)")
 
@@ -63,6 +69,6 @@ def recordArrival(database):
 	print("Record Arrival Time")
 	flightno = input("Flight Number: ")
 	date = input("Departure Date (YYYY-MM-DD): ")
-	time = input("Actual Arrival Time (hh-mm-ss): ")
+	time = input("Actual Arrival Time (hh:mm:ss): ")
 	Agent.recordArrival(database, flightno, date, time)
 	input("Updated (enter to continue)")
