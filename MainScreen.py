@@ -1,7 +1,7 @@
 import os
 
 import Agent
-import BookingScreen
+import Booking
 import Search
 import Util
 
@@ -53,7 +53,15 @@ def searchFlights(database):
 		returnDate = input("Return Date (YYYY-MM-DD): ")
 	sortByCon = input("Sorting by price. Sort by connections instead? (y/n): ").lower() == "y"
 	flights = Search.flightQuery(database, roundTrip, returnDate, date, partySize, source, destination, sortByCon)
-	# TODO:
+	if flights == None:
+		input("Flight got full because you're too slow")
+		return
+	print(flights)
+	Booking.addBooking(database, flights[0], flights[11], flights[4].strftime('%Y-%m-%d'))
+	if not flights[1] == None:
+		Booking.addBooking(database, flights[1], flights[12], flights[4].strftime('%Y-%m-%d'))
+# need name, email, price
+	input("Booked (enter to continue)")
 
 def recordDeparture(database):
 	Util.clear()
