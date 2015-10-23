@@ -118,31 +118,51 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 					"""
 
 
-	FlightsQ = """
-				--, queriedFlights as (
+	FlightsThere = """
+				, FlightsThere as (
 				Select * from GoodFlights
 				where src = '{0}' and
 				dst = '{1}' and
-				dep_date = to_date('{2}', 'yyyy-mm-dd')
-				ORDER BY {3} price
+				dep_date = to_date('{2}', 'yyyy-mm-dd'))
 				"""
 
+	FlightsBack = """
+				, FlightsBack as (
+				Select * from GoodFlights
+				where src = '{0}' and
+				dst = '{1}' and
+				dep_date = to_date('{2}', 'yyyy-mm-dd'))
+				"""
+
+
+
 	if bystops:
-		there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate, 'stops,')
+		there = AvailFlights + GoodConns + GoodFlights + FlightsThere.format(source, destination, depDate) + "Select * from flightsthere order by stops, price"
 	else:
-		there = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(source, destination, depDate, '')
+		there = AvailFlights + GoodConns + GoodFlights + FlightsThere.format(source, destination, depDate) + "Select * from flightsthere order by price"
+
+	theres = database.get(there)
+	for idx, the in enumerate(theres):
+		print(str(idx + 1) + ' ' +the[0] + ' ' + str(the[7]) + ' ' + str(the[9]) + ' ' + str(the[10]))
+
+	flight = int(input("Choose your flight"))
+	return theres[flight - 1]
+
+	#Not here yet, but we'll eventually get to the point of getting round trips ;)
+	print('-----------------------------')
+
+
 	if roundTrip:
 		if bystops:
-			back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate, 'stops,')
+			back = AvailFlights + GoodConns + GoodFlights + FlightsBack.format(destination, source, retDate) + "Select * from flightsback order by stops, price"
 		else:
-			back = AvailFlights + GoodConns + GoodFlights + FlightsQ.format(destination, source, retDate, '')
+			back = AvailFlights + GoodConns + GoodFlights + FlightsBack.format(destination, source, retDate) + "Select * from flightsback order by price"
 
 		backs = database.get(back)
-		for the in backs:
-			print(the[0] + ' ' + str(the[7]) + ' ' + str(the[9]) + ' ' + str(the[10]))
-	print('-----------------------------')
-	theres = database.get(there)
-	for the in theres:
-		print(the[0] + ' ' + str(the[7]) + ' ' + str(the[9]) + ' ' + str(the[10]))
+		for idx, the in enumerate(backs):
+			print(str(idx + 1) + ' ' + the[0] + ' ' + str(the[7]) + ' ' + str(the[9]) + ' ' + str(the[10]))
+
+
+
 
 	input("")
