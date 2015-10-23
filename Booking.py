@@ -1,3 +1,5 @@
+import random
+
 def bookingQuery(database, email):
 	query = """SELECT t.name, t.paid_price, b.* FROM
 			bookings b, tickets t WHERE
@@ -6,7 +8,14 @@ def bookingQuery(database, email):
 
 	database.cursor.execute(query)
 
-def addBooking(database, tno, flightno, fare, dep_date, seat):
+def addBooking(database, flightno, fare, dep_date):
+	query = """SELECT COUNT(*) FROM
+			tickets t
+			"""
+	tno = database.get(query)[0][0]
+	
+	seat = str(random.randint(0, 99)) + random.choice("abcdef")
+	
 	query = """INSERT INTO bookings
 			VALUES({0}, '{1}', '{2}', TO_DATE('{3}'), '{4}')""".format(
 				tno, flightno, fare, dep_date, seat)
