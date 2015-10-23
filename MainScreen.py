@@ -41,12 +41,12 @@ def searchFlights(database):
 	source = Util.findAirportCode(database, input("Source: "))
 	destination = Util.findAirportCode(database, input("Destination: "))
 	date = input("Departure Date (YYYY-MM-DD): ")
-	partySize = 1
+	partySize = int(input("Party Size: "))
 	returnDate = None
 	if roundTrip:
-		partySize = input("Party Size: ")
 		returnDate = input("Return Date (YYYY-MM-DD): ")
-	flights = Search.flightQuery(database, roundTrip, returnDate, date, partySize, source, destination)
+	sortByCon = input("Sorting by price. Sort by connections instead? (y/n").lower() == "y"
+	flights = Search.flightQuery(database, roundTrip, returnDate, date, partySize, source, destination, sortByCon)
 	# TODO:
 
 def recordDeparture(database):

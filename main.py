@@ -20,6 +20,7 @@ def connectScreen():
 		database = Database.connect(username, password)
 		if database:
 			break
+		input("Could not connect (enter to try again)")
 	introScreen(database)
 
 def introScreen(database):
