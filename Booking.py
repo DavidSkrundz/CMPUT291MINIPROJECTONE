@@ -6,7 +6,7 @@ def bookingQuery(database, email):
 	
 	database.cursor.execute(query)
 	
-def addBooking(database, tno, flightno, fare, dep_date, seat)
+def addBooking(database, tno, flightno, fare, dep_date, seat):
 	query = """INSERT INTO bookings
 			VALUES({0}, '{1}', '{2}', TO_DATE('{3}'), '{4}')""".format(
 				tno, flightno, fare, dep_date, seat)
