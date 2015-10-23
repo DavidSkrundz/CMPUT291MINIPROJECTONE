@@ -142,10 +142,11 @@ def flightQuery(database, roundTrip, retDate, depDate, partySize, source, destin
 		there = AvailFlights + GoodConns + GoodFlights + FlightsThere.format(source, destination, depDate) + "Select * from flightsthere order by price"
 
 	theres = database.get(there)
+	print("Index    Flight Number   Stops     Price     Seats Available")
 	for idx, the in enumerate(theres):
-		print(str(idx + 1) + ' ' +the[0] + ' ' + str(the[7]) + ' ' + str(the[9]) + ' ' + str(the[10]))
+		print(str(idx + 1) + '         ' +the[0] + '           ' + str(the[7]) + '       ' + str(the[9]) + '             ' + str(the[10]))
 
-	flight = int(input("Choose your flight"))
+	flight = int(input("Choose your flight: "))
 	return theres[flight - 1]
 
 	#Not here yet, but we'll eventually get to the point of getting round trips ;)
