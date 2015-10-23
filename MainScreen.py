@@ -45,7 +45,7 @@ def searchFlights(database):
 	returnDate = None
 	if roundTrip:
 		returnDate = input("Return Date (YYYY-MM-DD): ")
-	sortByCon = input("Sorting by price. Sort by connections instead? (y/n").lower() == "y"
+	sortByCon = input("Sorting by price. Sort by connections instead? (y/n): ").lower() == "y"
 	flights = Search.flightQuery(database, roundTrip, returnDate, date, partySize, source, destination, sortByCon)
 	# TODO:
 
