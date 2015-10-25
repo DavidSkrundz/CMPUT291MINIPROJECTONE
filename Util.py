@@ -70,7 +70,7 @@ def setupViews(database):
 	database.put(AvailFlights)
 
 	GoodConns = """
-				create view good_connections as (
+				create view good_1_connections as (
 				select a1.src,
 				a2.dst,
 				a1.dep_date,
@@ -104,11 +104,66 @@ def setupViews(database):
 				a1.fare,
 				a2.fare)
 				"""
-	good_connections = database.get("Select view_name from all_views where lower(view_name) = 'good_connections'")
-	if len(good_connections) != 0:
-		database.put("Drop view good_connections")
+	good_1_connections = database.get("Select view_name from all_views where lower(view_name) = 'good_1_connections'")
+	if len(good_1_connections) != 0:
+		database.put("Drop view good_1_connections")
 	database.put(GoodConns)
 
+	#Needs testing
+	good2Conns = """
+	create view good_2_connections as (
+	select a1.src,
+	a3.dst,
+	a1.dep_date,
+	a1.dep_time,
+	a3.arr_time,
+	a1.flightno as flightno1,
+	a2.flightno as flightno2,
+	a3.flightno as flightno3,
+	a2.dep_time-a1.arr_time as layovertime1,
+	a3.dep_time -a2.arr_time as layovertime2,
+	min(a1.price+a2.price + a3.price) as Price,
+	CASE WHEN a1.seats <= a2.seats then (CASE WHEN a1.seats <= a3.seats then a1.seats else a3.seats end) else a2.seats end as seats,
+	a1.fare as fare1,
+	a2.fare as fare2,
+	a3.fare as fare3
+
+	from available_flights a1,
+	available_flights a2,
+	available_flights a3
+
+	where a1.dst=a2.src and
+	a1.arr_time +1.5/24 <=a2.dep_time and
+	a1.arr_time +5/24 >=a2.dep_time and
+	a2.dst = a3.src and
+	a2.arr_time + 1.5/24 <= a3.dep_time and
+	a2.arr_time + 5/24 >= a3.dep_time
+
+	group by a1.src,
+	a3.dst,
+	a1.dep_date,
+	a1.dep_time,
+	a3.arr_time,
+	a1.flightno,
+	a2.flightno,
+	a3.flightno,
+	a2.dep_time,
+	a1.arr_time,
+	a3.dep_time,
+	a2.arr_time,
+	CASE WHEN a1.seats <= a2.seats then (CASE WHEN a1.seats <= a3.seats then a1.seats else a3.seats end) else a2.seats end as seats,
+	a1.fare,
+	a2.fare,
+	a3.fare)
+				 """
+
+	good_2_connections = database.get("Select view_name from all_views where lower(view_name) = 'good_2_connections'")
+
+	if len(good_2_connections) != 0 :
+		database.put("drop view good_2_connections")
+	database.put(good2Conns)
+
+	#Gonna need to update this to include 2 conns
 	GoodFlights =   """
 					create view good_flights as (
 					Select flightno,

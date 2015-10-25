@@ -48,12 +48,12 @@ def searchFlights(database, email):
 	source = Util.findAirportCode(database, input("Source: "))
 	destination = Util.findAirportCode(database, input("Destination: "))
 	date = input("Departure Date (YYYY-MM-DD): ")
-	partySize = int(input("Party Size: "))
+	maxConns = 2 if input("Increase maximum connections to 2? (y/n): ").lower() == "y" else 1
 	returnDate = None
 	if roundTrip:
 		returnDate = input("Return Date (YYYY-MM-DD): ")
 	sortByCon = input("Sorting by price. Sort by connections instead? (y/n): ").lower() == "y"
-	flights = Search.flightQuery(database, roundTrip, returnDate, date, partySize, source, destination, sortByCon)
+	flights = Search.flightQuery(database, roundTrip, returnDate, date, maxConns, source, destination, sortByCon)
 	if flights == None:
 		input("Flight got full because you're too slow (enter to continue)")
 		return
