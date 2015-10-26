@@ -68,7 +68,7 @@ def setupViews(database):
 							fa.price
 							having fa.limit-count(tno) >= 1)"""
 	database.put(AvailFlights)
-	print("1")
+	print("Connecting to japan")
 	GoodConns = """
 				create view good_1_connections as (
 				select a1.src,
@@ -110,7 +110,7 @@ def setupViews(database):
 	if len(good_1_connections) != 0:
 		database.put("Drop view good_1_connections")
 	database.put(GoodConns)
-	print("2")
+	print("Downloading giant files")
 	#Needs testing
 	good2Conns = """
 	create view good_2_connections as (
@@ -168,7 +168,7 @@ def setupViews(database):
 	if len(good_2_connections) != 0 :
 		database.put("drop view good_2_connections")
 	database.put(good2Conns)
-	print("3")
+	print("Uploading a car")
 	#Gonna need to update this to include 2 conns
 	GoodFlights =   """
 					create view good_flights as (
@@ -254,6 +254,7 @@ def setupViews(database):
 	if len(good_flights) != 0:
 		database.put("Drop view good_flights")
 	database.put(GoodFlights)
+	print("Tesselating Davoods")
 
 
 def print_table(headings, table_format, data, columns=[]):
