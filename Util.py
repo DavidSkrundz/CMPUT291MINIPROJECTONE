@@ -168,6 +168,7 @@ def setupViews(database):
 					create view good_flights as (
 					Select flightno,
 					null as flightno2,
+					null as flightno3,
 					src,
 					dst,
 					dep_date,
@@ -175,10 +176,12 @@ def setupViews(database):
 					arr_time,
 					0 as Stops,
 					null as LayoverTime,
+					null as layovertime2,
 					price,
 					sum(seats) as seatCount,
 					fare,
-					null as fare2
+					null as fare2,
+					null as fare3
 
 					From available_flights
 
@@ -196,6 +199,7 @@ def setupViews(database):
 
 					Select flightno1,
 					flightno2,
+					null as flightno3,
 					src,
 					dst,
 					dep_date,
@@ -203,12 +207,33 @@ def setupViews(database):
 					arr_time,
 					1 as Stops,
 					layovertime,
+					null as layovertime2,
 					price,
 					seats,
 					fare1,
-					fare2
+					fare2,
+					null as fare3
 
 					from good_connections
+
+					UNION
+
+					Select flightno1,
+					flightno2,
+					flightno3,
+					src,
+					dst,
+					dep_date,
+					dep_time,
+					arr_time,
+					2 as Stops,
+					layovertime,
+					layovertime2,
+					price,
+					seats,
+					fare1,
+					fare2,
+					fare3
 					)
 					"""
 	good_flights = database.get("Select view_name from all_views where lower(view_name) = 'good_flights'")
