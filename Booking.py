@@ -1,7 +1,5 @@
 import random
 
-import Tickets
-
 def bookingQuery(database, email):
 	query = """SELECT t.name, t.paid_price, b.* FROM
 			bookings b, tickets t WHERE
