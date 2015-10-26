@@ -28,7 +28,7 @@ def clear():
 def setupViews(database):
 	availableFlights = database.get("Select view_name from all_views where lower(view_name) = 'available_flights'")
 	if len(availableFlights) != 0:
-		database.put("drop view available_flights;")
+		database.put("drop view available_flights")
 	AvailFlights = """Create view available_flights as (
 							select f.flightno,
 							sf.dep_date,
@@ -68,7 +68,7 @@ def setupViews(database):
 							fa.price
 							having fa.limit-count(tno) >= 1)"""
 	database.put(AvailFlights)
-
+	
 	GoodConns = """
 				create view good_1_connections as (
 				select a1.src,
