@@ -21,6 +21,7 @@ def connectScreen():
 		if database:
 			break
 		input("Could not connect (enter to try again)")
+	Util.setupViews(database)
 	introScreen(database)
 
 def introScreen(database):

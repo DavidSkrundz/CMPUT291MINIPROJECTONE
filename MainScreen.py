@@ -58,9 +58,10 @@ def searchFlights(database, email):
 		input("Flight got full because you're too slow (enter to continue)")
 		return
 	print(flights)
-	Booking.addBooking(database, email, flights[0], flights[11], flights[4].strftime('%Y-%m-%d'), flights[9])
+	tno = Tickets.newTicket(database, email, price)
+	Booking.addBooking(database, tno, email, flights[0], flights[11], flights[4].strftime('%Y-%m-%d'), flights[9])
 	if not flights[1] == None:
-		Booking.addBooking(database, flights[1], flights[12], flights[4].strftime('%Y-%m-%d'), flights[9])
+		Booking.addBooking(database, tno, flights[1], flights[12], flights[4].strftime('%Y-%m-%d'), flights[9])
 # need name, email, price
 	input("Booked (enter to continue)")
 
