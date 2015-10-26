@@ -68,12 +68,13 @@ def setupViews(database):
 							fa.price
 							having fa.limit-count(tno) >= 1)"""
 	database.put(AvailFlights)
-	
+	print("1")
 	GoodConns = """
 				create view good_1_connections as (
 				select a1.src,
 				a2.dst,
 				a1.dep_date,
+				a2.dep_date as dep_date2,
 				a1.dep_time,
 				a2.arr_time,
 				a1.flightno as flightno1,
@@ -94,6 +95,7 @@ def setupViews(database):
 				group by a1.src,
 				a2.dst,
 				a1.dep_date,
+				a2.dep_date,
 				a1.dep_time,
 				a2.arr_time,
 				a1.flightno,
@@ -108,13 +110,15 @@ def setupViews(database):
 	if len(good_1_connections) != 0:
 		database.put("Drop view good_1_connections")
 	database.put(GoodConns)
-
+	print("2")
 	#Needs testing
 	good2Conns = """
 	create view good_2_connections as (
 	select a1.src,
 	a3.dst,
 	a1.dep_date,
+	a2.dep_date as dep_date2,
+	a3.dep_date as dep_date3,
 	a1.dep_time,
 	a3.arr_time,
 	a1.flightno as flightno1,
@@ -142,6 +146,8 @@ def setupViews(database):
 	group by a1.src,
 	a3.dst,
 	a1.dep_date,
+	a3.dep_date,
+	a2.dep_date,
 	a1.dep_time,
 	a3.arr_time,
 	a1.flightno,
@@ -151,7 +157,7 @@ def setupViews(database):
 	a1.arr_time,
 	a3.dep_time,
 	a2.arr_time,
-	CASE WHEN a1.seats <= a2.seats then (CASE WHEN a1.seats <= a3.seats then a1.seats else a3.seats end) else a2.seats end as seats,
+	CASE WHEN a1.seats <= a2.seats then (CASE WHEN a1.seats <= a3.seats then a1.seats else a3.seats end) else a2.seats end,
 	a1.fare,
 	a2.fare,
 	a3.fare)
@@ -162,26 +168,28 @@ def setupViews(database):
 	if len(good_2_connections) != 0 :
 		database.put("drop view good_2_connections")
 	database.put(good2Conns)
-
+	print("3")
 	#Gonna need to update this to include 2 conns
 	GoodFlights =   """
 					create view good_flights as (
 					Select flightno,
 					null as flightno2,
 					null as flightno3,
+					dep_date,
+					null as dep_date2,
+					null as dep_date3,
+					fare,
+					null as fare2,
+					null as fare3,
 					src,
 					dst,
-					dep_date,
 					dep_time,
 					arr_time,
 					0 as Stops,
 					null as LayoverTime,
 					null as layovertime2,
 					price,
-					sum(seats) as seatCount,
-					fare,
-					null as fare2,
-					null as fare3
+					sum(seats) as seatCount
 
 					From available_flights
 
@@ -200,19 +208,21 @@ def setupViews(database):
 					Select flightno1,
 					flightno2,
 					null as flightno3,
+					dep_date,
+					dep_date2,
+					null,
+					fare1,
+					fare2,
+					null as fare3,
 					src,
 					dst,
-					dep_date,
 					dep_time,
 					arr_time,
 					1 as Stops,
 					layovertime,
 					null as layovertime2,
 					price,
-					seats,
-					fare1,
-					fare2,
-					null as fare3
+					seats
 
 					from good_1_connections
 
@@ -221,19 +231,21 @@ def setupViews(database):
 					Select flightno1,
 					flightno2,
 					flightno3,
+					dep_date,
+					dep_date2,
+					dep_date3,
+					fare1,
+					fare2,
+					fare3,
 					src,
 					dst,
-					dep_date,
 					dep_time,
 					arr_time,
 					2 as Stops,
-					layovertime,
+					layovertime1,
 					layovertime2,
 					price,
-					seats,
-					fare1,
-					fare2,
-					fare3
+					seats
 
 					from good_2_connections
 					)
@@ -242,3 +254,36 @@ def setupViews(database):
 	if len(good_flights) != 0:
 		database.put("Drop view good_flights")
 	database.put(GoodFlights)
+
+
+def print_table(headings, table_format, data, columns=[]):
+    """
+    Prints a generic set of data in a tabular format
+    Arguments:
+    headings: list of heading strings for each column
+    table_format: list of character lengths for each column
+    columns: column indexes to print
+    data: data to tabulate in the form [][], [](), ()()
+    Raises:
+    ValueError: if the headings, table_format, or data lengths are not compatible
+    """
+    if not ((len(headings) == len(table_format)) and
+            (not columns or (len(table_format) == len(columns)))):
+        raise(ValueError("Argument lengths are not compatible."))
+
+    if not columns:
+        columns = [i for i in range(len(headings))]
+
+    string_format = ""
+    for rule in table_format:
+        string_format += "{:<" + str(rule) + "} "
+
+    string_format.strip()
+
+    for row in enumerate(data):
+        if (row[0] % 15 == 0):
+            print()
+            print(string_format.format(*headings))
+            print(string_format.replace("{:<", "{:-<").format(*["" for i in range(len(headings))]))
+        print(string_format.format(*[str(row[1][i]).strip() for i in columns]))
+    print()
