@@ -1,7 +1,5 @@
 import random
 
-import Tickets
-
 def bookingQuery(database, email):
 	query = """SELECT t.name, t.paid_price, b.* FROM
 			bookings b, tickets t WHERE
@@ -10,9 +8,7 @@ def bookingQuery(database, email):
 
 	database.cursor.execute(query)
 
-def addBooking(database, email, flightno, fare, dep_date, price):
-	tno = Tickets.newTicket(database, email, price)
-
+def addBooking(database, tno, email, flightno, fare, dep_date, price):
 	seat = str(random.randint(0, 99)) + random.choice("abcdef")
 				
 	query = """INSERT INTO bookings
