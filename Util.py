@@ -214,7 +214,7 @@ def setupViews(database):
 					fare2,
 					null as fare3
 
-					from good_connections
+					from good_1_connections
 
 					UNION
 
@@ -234,6 +234,8 @@ def setupViews(database):
 					fare1,
 					fare2,
 					fare3
+
+					from good_2_connections
 					)
 					"""
 	good_flights = database.get("Select view_name from all_views where lower(view_name) = 'good_flights'")
