@@ -40,6 +40,6 @@ def bookingScreen(database, email):
 			print("")
 			print("1. Delete")
 			print("2. Back")
-			selection = int(input(""))
-			if selection == 1:
+			selectionmenu = int(input(""))
+			if selectionmenu == 1:
 				Booking.cancelBooking(database, bookings[selection][3], bookings[selection][4], bookings[selection][6])
