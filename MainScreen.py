@@ -57,11 +57,18 @@ def searchFlights(database, email):
 	if flights == None:
 		input("Flight got full because you're too slow (enter to continue)")
 		return
-	print(flights)
-	tno = Tickets.newTicket(database, email, price)
-	Booking.addBooking(database, tno, email, flights[0], flights[11], flights[4].strftime('%Y-%m-%d'), flights[9])
-	if not flights[1] == None:
-		Booking.addBooking(database, tno, flights[1], flights[12], flights[4].strftime('%Y-%m-%d'), flights[9])
+	elif (len(flights) == 2):
+		price = flights[0][17] + flights[1][17]
+		tno = Tickets.newTicket(database, email, price)
+		Booking.addBooking(database, tno, email, [flights[0][1], flights[0][2], flights[0][3]], [flights[0][7], flights[0][8], flights[0][9]], \
+							[flights[0][4].strftime('%Y-%m-%d'),flights[0][5].strftime('%Y-%m-%d'),flights[0][6].strftime('%Y-%m-%d')], price)
+
+		Booking.addBooking(database, tno, email, [flights[1][1], flights[1][2], flights[1][3]], [flights[1][7], flights[1][8], flights[1][9]], \
+							[flights[1][4].strftime('%Y-%m-%d'),flights[1][5].strftime('%Y-%m-%d'),flights[1][6].strftime('%Y-%m-%d')], price)
+	else:
+		price = flights[0][17]
+		Booking.addBooking(database, tno, email, [flights[0][1], flights[0][2], flights[0][3]], [flights[0][7], flights[0][8], flights[0][9]], \
+							[flights[0][4].strftime('%Y-%m-%d'),flights[0][5].strftime('%Y-%m-%d'),flights[0][6].strftime('%Y-%m-%d')], price)
 # need name, email, price
 	input("Booked (enter to continue)")
 
