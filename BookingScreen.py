@@ -8,10 +8,11 @@ def bookingScreen(database, email):
 		Util.clear()
 		Booking.bookingQuery(database, email)
 		bookings = database.cursor.fetchall()
+		print("0 to exit")
 		Util.print_table(["Row #", "Ticket no.", "Name", "Date", "Price"],
 							[6, 10, 20, 20, 10],
 							bookings,
-							[0, 3, 1, 7, 2])
+							[0, 3, 1, 6, 2])
 #		for idx, booking in enumerate(bookings):
 #			print("{0}. Ticket no. = {1} Name = {2} Date = {3} Price = {4}"\
 #				.format(idx, booking[2], booking[0], booking[3].strftime("%d-%b-%Y"), booking[1]))
@@ -19,7 +20,10 @@ def bookingScreen(database, email):
 			print("No bookings.")
 			input("")
 			return
-		selection = input("Select booking:")
+		selection = int(input("Select booking: "))
+		if selection == 0:
+			return
+		selection = selection - 1
 		if selection > len(bookings):
 			print("Invalid selection (enter to continue)")
 			input("")
@@ -36,6 +40,6 @@ def bookingScreen(database, email):
 			print("")
 			print("1. Delete")
 			print("2. Back")
-			selection = input("")
+			selection = int(input(""))
 			if selection == 1:
 				Booking.cancelBooking(database, bookings[selection][2])
