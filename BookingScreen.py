@@ -17,7 +17,7 @@ def bookingScreen(database, email):
 			return
 		selection = input("Select booking:")
 		if selection > len(bookings):
-			print("Invalid selection.")
+			print("Invalid selection (enter to continue)")
 			input("")
 			continue
 		else:
