@@ -35,10 +35,12 @@ def addBooking(database, tno, flightnos, fares, dep_dates):
 		i += 1
 
 
-def cancelBooking(database, tno):
+def cancelBooking(database, tno, flightno, dep_date):
 	query = """DELETE FROM
 			bookings b WHERE
-			b.tno = {}""".format(tno)
+			b.tno = {0} and
+			b.flightno = '{1}' and
+			b.dep_date = to_date('{2}', 'yyyy-mm-dd')""".format(tno, flightno, dep_date)
 
 	database.cursor.execute(query)
 	database.commit()
