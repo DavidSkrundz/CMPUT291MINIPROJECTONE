@@ -57,18 +57,21 @@ def searchFlights(database, email):
 	if flights == None:
 		input("Flight could not be booked (enter to continue)")
 		return
-	elif (len(flights) == 2):
+	
+	if len(flights) == 2:
 		price = flights[0][17] + flights[1][17]
 		tno = Tickets.newTicket(database, email, price)
-		Booking.addBooking(database, tno, email, [flights[0][1], flights[0][2], flights[0][3]], [flights[0][7], flights[0][8], flights[0][9]], \
-							[flights[0][4].strftime('%Y-%m-%d'),flights[0][5].strftime('%Y-%m-%d'),flights[0][6].strftime('%Y-%m-%d')])
 
-		Booking.addBooking(database, tno, email, [flights[1][1], flights[1][2], flights[1][3]], [flights[1][7], flights[1][8], flights[1][9]], \
-							[flights[1][4].strftime('%Y-%m-%d'),flights[1][5].strftime('%Y-%m-%d'),flights[1][6].strftime('%Y-%m-%d')])
+		Booking.addBooking(database, tno, [flights[0][1], flights[0][2], flights[0][3]], [flights[0][7], flights[0][8], flights[0][9]], \
+							[flights[0][4],flights[0][5],flights[0][6]])
+
+		Booking.addBooking(database, tno, [flights[1][1], flights[1][2], flights[1][3]], [flights[1][7], flights[1][8], flights[1][9]], \
+							[flights[1][4],flights[1][5],flights[1][6]])
 	else:
 		price = flights[0][17]
-		Booking.addBooking(database, tno, email, [flights[0][1], flights[0][2], flights[0][3]], [flights[0][7], flights[0][8], flights[0][9]], \
-							[flights[0][4].strftime('%Y-%m-%d'),flights[0][5].strftime('%Y-%m-%d'),flights[0][6].strftime('%Y-%m-%d')])
+		tno = Tickets.newTicket(database, email, price)
+		Booking.addBooking(database, tno, [flights[0][1], flights[0][2], flights[0][3]], [flights[0][7], flights[0][8], flights[0][9]], \
+							[flights[0][4],flights[0][5],flights[0][6]])
 # need name, email, price
 	input("Booked (enter to continue)")
 
