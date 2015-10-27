@@ -8,9 +8,13 @@ def bookingScreen(database, email):
 		Util.clear()
 		Booking.bookingQuery(database, email)
 		bookings = database.cursor.fetchall()
-		for idx, booking in enumerate(bookings):
-			print("{0}. Ticket no. = {1} Name = {2} Date = {3} Price = {4}"\
-				.format(idx, booking[2], booking[0], booking[3].strftime("%d-%b-%Y"), booking[1]))
+		Util.print_table(["Row #", "Ticket no.", "Name", "Date", "Price"],
+							[6, 10, 20, 20, 10],
+							bookings,
+							[0, 3, 1, 7, 2])
+#		for idx, booking in enumerate(bookings):
+#			print("{0}. Ticket no. = {1} Name = {2} Date = {3} Price = {4}"\
+#				.format(idx, booking[2], booking[0], booking[3].strftime("%d-%b-%Y"), booking[1]))
 		if len(bookings) == 0:
 			print("No bookings.")
 			input("")

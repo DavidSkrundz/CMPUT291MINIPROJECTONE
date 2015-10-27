@@ -1,10 +1,18 @@
 import random
 
 def bookingQuery(database, email):
-	query = """SELECT t.name, t.paid_price, b.* FROM
-			bookings b, tickets t WHERE
+	query = """SELECT ROW_NUMBER() OVER (ORDER BY b.TNO),
+			t.name,
+			t.paid_price,
+			b.tno,
+			b.flightno,
+			b.fare,
+			to_char(b.dep_date, 'yyyy-mm-dd'),
+			b.seat
+			FROM bookings b, tickets t WHERE
 			t.tno = b.tno AND
-			t.email = '{}'""".format(email)
+			t.email = '{}'
+			ORDER BY TNO""".format(email)
 
 	database.cursor.execute(query)
 

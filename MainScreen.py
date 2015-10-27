@@ -5,6 +5,7 @@ import Booking
 import Search
 import Tickets
 import Util
+import BookingScreen
 
 def mainScreen(database, email, isAgent):
 	while True:
@@ -57,7 +58,7 @@ def searchFlights(database, email):
 	if flights == None:
 		input("Flight could not be booked (enter to continue)")
 		return
-	
+
 	if len(flights) == 2:
 		price = flights[0][17] + flights[1][17]
 		tno = Tickets.newTicket(database, email, price)
