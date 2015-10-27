@@ -12,7 +12,7 @@ def addBooking(database, tno, flightnos, fares, dep_dates):
 	seat = str(random.randint(0, 99)) + random.choice("abcdef")
 	
 	i = 0
-	for (flightno in flightnos):
+	for flightno in flightnos:
 		if flightno == None:
 			continue
 		else:
