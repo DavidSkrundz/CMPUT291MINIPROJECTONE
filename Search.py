@@ -43,7 +43,7 @@ def flightQuery(database, roundTrip, retDate, depDate, maxConns, source, destina
 					 result,
 					 [0, 1 ,2 ,3 ,10,11,12,13,14,15,16,17,18])
 
-	flight = int(input("Choose your flight (by Row #): "))
+	flight = int(input("Choose your outbound flight (by Row #): "))
 
 	stillAvailable = """Select * from Good_Flights where flightno = '{0}'
 						AND '{1}' = COALESCE(FLIGHTNO2, 'None')
@@ -76,6 +76,7 @@ def flightQuery(database, roundTrip, retDate, depDate, maxConns, source, destina
 
 			resultback = database.get(back)
 			if len(resultback) > 0:
+				Util.clear()
 				Util.print_table(["Row #", "Flight # 1", "Flight # 2", "Flight # 3", "Source", "Destination", "Departure Time", "Arrival Time", "Stops", "Layover 1", "Layover 2", "Price", "Seats"], \
 						 	[6, 12,12,12,10,11,20,20,10,10,10,10,10], \
 						 	resultback,
@@ -91,8 +92,8 @@ def flightQuery(database, roundTrip, retDate, depDate, maxConns, source, destina
 				else:
 					return None
 			else:
-				tryagain = input("No return flights found contiue? (y/n): ")
-				if tryagain.lower() == 'n':
+				tryagain = input("No return flights found continue? (y/n): ")
+				if tryagain.lower() != 'y':
 					return None
 				else:
 					retDate = input("Return Date (YYYY-MM-DD): ")
