@@ -187,7 +187,7 @@ def setupViews(database):
 					arr_time,
 					0 as Stops,
 					null as LayoverTime,
-					null as layovertime2,
+					null as LayoverTime2,
 					price,
 					sum(seats) as seatCount
 
@@ -256,7 +256,7 @@ def setupViews(database):
 	database.put(GoodFlights)
 	print("Tesselating Davoods")
 
-
+#Credit to George Antonious for this table printing function
 def print_table(headings, table_format, data, columns=[]):
     """
     Prints a generic set of data in a tabular format
