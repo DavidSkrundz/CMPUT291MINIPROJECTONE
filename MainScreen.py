@@ -73,8 +73,8 @@ def searchFlights(database, email):
 		tno = Tickets.newTicket(database, email, price)
 		Booking.addBooking(database, tno, [flights[0][1], flights[0][2], flights[0][3]], [flights[0][7], flights[0][8], flights[0][9]], \
 							[flights[0][4],flights[0][5],flights[0][6]])
-# need name, email, price
-	input("Booked (enter to continue)")
+							
+	input("Booked with ticket number {} (enter to continue)".format(tno))
 
 def recordDeparture(database):
 	Util.clear()
