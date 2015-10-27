@@ -67,25 +67,34 @@ def flightQuery(database, roundTrip, retDate, depDate, maxConns, source, destina
 	Util.clear()
 
 	if roundTrip:
-		if bystops:
-			back = FlightsProto.format(destination,source,  maxConns, retDate,  " order by stops, price")
-		else:
-			back = FlightsProto.format(destination, source,  maxConns, retDate, "order by price")
+		cont = True
+		while(cont):
+			if bystops:
+				back = FlightsProto.format(destination,source,  maxConns, retDate,  " order by stops, price")
+			else:
+				back = FlightsProto.format(destination, source,  maxConns, retDate, "order by price")
 
-		resultback = database.get(back)
-		Util.print_table(["Row #", "Flight # 1", "Flight # 2", "Flight # 3", "Source", "Destination", "Departure Time", "Arrival Time", "Stops", "Layover 1", "Layover 2", "Price", "Seats"], \
-						 [6, 12,12,12,10,11,20,20,10,10,10,10,10], \
-						 resultback,
-						 [0, 1 ,2 ,3 ,10,11,12,13,14,15,16,17,18])
-		flightback = int(input("Choose your return flight (by Row #): "))
+			resultback = database.get(back)
+			if len(resultback) > 0:
+				Util.print_table(["Row #", "Flight # 1", "Flight # 2", "Flight # 3", "Source", "Destination", "Departure Time", "Arrival Time", "Stops", "Layover 1", "Layover 2", "Price", "Seats"], \
+						 	[6, 12,12,12,10,11,20,20,10,10,10,10,10], \
+						 	resultback,
+						 	[0, 1 ,2 ,3 ,10,11,12,13,14,15,16,17,18])
+				flightback = int(input("Choose your return flight (by Row #): "))
 
-		backAvailable = stillAvailable.format(resultback[flight - 1][1], resultback[flight - 1][2], resultback[flight - 1][3], \
+				backAvailable = stillAvailable.format(resultback[flight - 1][1], resultback[flight - 1][2], resultback[flight - 1][3], \
 										resultback[flight - 1][7], resultback[flight - 1][8], resultback[flight - 1][9], \
 										str(resultback[flight - 1][4]), str(resultback[flight - 1][5]), str(resultback[flight - 1][6]))
-		if (len(database.get(backAvailable)) > 0):
-			flightslist.append(resultback[flightback - 1])
-			return flightslist
-		else:
-			return None
+				if (len(database.get(backAvailable)) > 0):
+					flightslist.append(resultback[flightback - 1])
+					cont = False
+				else:
+					return None
+			else:
+				tryagain = input("No return flights found contiue? (y/n): ")
+				if tryagain.lower() == 'n':
+					return None
+				else:
+					retDate = input("Return Date (YYYY-MM-DD): ")
 
-	input("")
+	return flightslist

@@ -55,7 +55,7 @@ def searchFlights(database, email):
 	sortByCon = input("Sorting by price. Sort by connections instead? (y/n): ").lower() == "y"
 	flights = Search.flightQuery(database, roundTrip, returnDate, date, maxConns, source, destination, sortByCon)
 	if flights == None:
-		input("Flight got full because you're too slow (enter to continue)")
+		input("Flight could not be booked (enter to continue)")
 		return
 	elif (len(flights) == 2):
 		price = flights[0][17] + flights[1][17]
