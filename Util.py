@@ -16,7 +16,6 @@ def findAirportCode(database, airportCodeOrName):
 		elif len(foundCodes) == 1:
 			return foundCodes[0][0]
 		else:
-			print("BAD THING")
 			pass
 
 def clear():

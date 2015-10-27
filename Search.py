@@ -38,6 +38,8 @@ def flightQuery(database, roundTrip, retDate, depDate, maxConns, source, destina
 		there = FlightsProto.format(source, destination, maxConns, depDate, "order by price")
 
 	result = database.get(there)
+	if len(result) == 0:
+		return None
 	Util.print_table(["Row #", "Flight # 1", "Flight # 2", "Flight # 3", "Source", "Destination", "Departure Time", "Arrival Time", "Stops", "Layover 1", "Layover 2", "Price", "Seats"], \
 					 [6, 12,12,12,10,11,20,20,10,10,10,10,10], \
 					 result,
