@@ -8,7 +8,7 @@ def bookingScreen(database, email):
 		Util.clear()
 		Booking.bookingQuery(database, email)
 		bookings = database.cursor.fetchall()
-		print("0 to exit")
+		print("0 to go back")
 		Util.print_table(["Row #", "Ticket no.", "Name", "Date", "Price"],
 							[6, 10, 20, 20, 10],
 							bookings,
